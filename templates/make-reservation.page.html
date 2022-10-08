@@ -1,0 +1,39 @@
+{{ template "base" .}}
+
+{{ define "content"}}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mt-3">This is reservation page!</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi laborum quis est voluptas, nesciunt
+                earum nobis sequi unde deserunt? Vel quasi quibusdam ratione vitae minus, aliquam officia quia ut
+                et.</p>
+        </div>
+        <div class="col-12">
+            <h2 class="mt-5">Send your contact here</h2>
+            <form action="./reservation.html" method="GET">
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label for="first_name" class="form-label">First name</label>
+                        <input type="text" class="form-control" name="first_name" id="first_name" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label for="last_name" class="form-label">Last name</label>
+                        <input type="text" class="form-control" name="last_name" id="last_name" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" name="phone" id="phone" required>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{ end }}

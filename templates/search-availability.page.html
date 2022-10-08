@@ -1,0 +1,49 @@
+{{ template "base" .}}
+
+{{ define "content"}}
+    <div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h2 class="text-center mt-3">This is reservation page!</h2>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi laborum quis est voluptas, nesciunt
+					earum nobis sequi unde deserunt? Vel quasi quibusdam ratione vitae minus, aliquam officia quia ut
+					et.</p>
+			</div>
+			<div class="col-12">
+				<h2 class="mt-5">Search for avalible rooms!</h2>
+				<form action="/search-availability" method="POST" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+					<div class="row" id="foo_date">
+						<div class="mb-3 col">
+							<label for="start_date" class="form-label">Start date</label>
+							<input type="text" class="form-control" name="start_date" id="start_date"
+								aria-describedby="start_date_help" required>
+						</div>
+						<div class="mb-3 col">
+							<label for="end_date" class="form-label">End date</label>
+							<input type="text" class="form-control" name="end_date" id="end_date"
+								aria-describedby="end_date_help" required>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary">Search</button>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p id="below-main-content">Original text</p>
+				<button id="actionBtn" class="btn btn-outline-primary">Action on text</button>
+			</div>
+		</div>
+    </div>
+{{ end }}
+
+{{ define "js"}}
+<script>
+    		// set calender for input
+		const foo_date = document.getElementById("foo_date")
+		const rangepicker = new DateRangePicker(foo_date, {
+			format: "yyyy-mm-dd"
+		});
+</script>
+{{ end }}

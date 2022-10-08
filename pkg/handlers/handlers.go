@@ -29,7 +29,7 @@ func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	remoteIP := r.RemoteAddr
 	m.app.Session.Put(r.Context(), "remote_IP", remoteIP)
 
-	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
+	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
 	// fmt.Fprintf(w, "Home page!")
 	// if (err != nil) {
 	// 	fmt.Println(err)
@@ -45,7 +45,7 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	remote_IP := m.app.Session.GetString(r.Context(), "remote_IP")
 	stringMap["remote_IP"] = remote_IP
 
-	render.RenderTemplate(w, "about.page.html", &models.TemplateData{
+	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 	// sum:=addValues(2,3)
@@ -66,9 +66,40 @@ func (m *Repository) Divide(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func addValues(x, y int) int {
-// 	return x + y
-// }
+func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{
+	})
+}
+
+func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "majors.page.html", &models.TemplateData{
+	})
+}
+
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+	})
+}
+
+// Get
+func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{
+	})
+}
+
+// POST
+func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
+	start := r.Form.Get("start_date")
+	end := r.Form.Get("end_date")
+	
+	w.Write([]byte(fmt.Sprintf("Start: %s and End: %s", start,end)))
+}
+
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{
+	})
+}
+
 
 func divideValues(x, y float32) (float32, error) {
 	if y == 0 {

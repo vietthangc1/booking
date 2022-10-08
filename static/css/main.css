@@ -1,0 +1,18 @@
+.my-footer {
+    height: 5em;
+    margin-top: 1.5em;
+    background-color: aqua;
+    padding: 5px;
+    font-size: 80%;
+}
+
+.room-image {
+    width: 50%;
+}
+
+.redText {
+    color: red;
+}
+.notie-container {
+    box-shadow: none;
+}

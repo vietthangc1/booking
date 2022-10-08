@@ -2,12 +2,14 @@ package render
 
 import (
 	"bytes"
-	"github.com/vietthangc1/booking/pkg/config"
-	"github.com/vietthangc1/booking/pkg/models"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/justinas/nosurf"
+	"github.com/vietthangc1/booking/pkg/config"
+	"github.com/vietthangc1/booking/pkg/models"
 )
 
 var app *config.AppConfig
@@ -16,11 +18,12 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(data *models.TemplateData) (*models.TemplateData) {
+func AddDefaultData(data *models.TemplateData, req *http.Request) (*models.TemplateData) {
+	data.CSRFToken = nosurf.Token(req)
 	return data
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, data *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, req *http.Request, tmpl string, data *models.TemplateData) {
 	var templateCache map[string]*template.Template
 
 	if (app.UseCache) {
@@ -35,7 +38,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, data *models.TemplateDat
 	}
 
 	buffer := new(bytes.Buffer)
-	data = AddDefaultData(data)
+	data = AddDefaultData(data, req)
 	err := parsedTemplate.Execute(buffer, data)
 	if err != nil {
 		log.Println(err)
