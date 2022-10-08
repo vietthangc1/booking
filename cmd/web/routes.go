@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/vietthangc1/booking/pkg/config"
-	"github.com/vietthangc1/booking/pkg/handlers"
+	"github.com/vietthangc1/booking/internal/config"
+	"github.com/vietthangc1/booking/internal/handlers"
 
 	// "github.com/bmizerany/pat"
 	"github.com/go-chi/chi/v5"
@@ -28,7 +28,6 @@ func routes(a *config.AppConfig) http.Handler {
 	mux.Use(middleware.Recoverer)
 	mux.Use(NoSurf)
 	mux.Use(SessionLoad)
-	
 
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
@@ -39,6 +38,8 @@ func routes(a *config.AppConfig) http.Handler {
 
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
+
+	mux.Post("/search-availability-json", handlers.Repo.AvailabilityJSON)
 
 	mux.Get("/contact", handlers.Repo.Contact)
 

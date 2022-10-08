@@ -1,12 +1,15 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/vietthangc1/booking/pkg/config"
-	"github.com/vietthangc1/booking/pkg/render"
-	"github.com/vietthangc1/booking/pkg/models"
+	"log"
 	"net/http"
+
+	"github.com/vietthangc1/booking/internal/config"
+	"github.com/vietthangc1/booking/internal/models"
+	"github.com/vietthangc1/booking/internal/render"
 )
 
 var Repo *Repository
@@ -67,39 +70,52 @@ func (m *Repository) Divide(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{
-	})
+	render.RenderTemplate(w, r, "generals.page.html", &models.TemplateData{})
 }
 
 func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "majors.page.html", &models.TemplateData{
-	})
+	render.RenderTemplate(w, r, "majors.page.html", &models.TemplateData{})
 }
 
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
-	})
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{})
 }
 
 // Get
 func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{
-	})
+	render.RenderTemplate(w, r, "search-availability.page.html", &models.TemplateData{})
 }
 
 // POST
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start_date")
 	end := r.Form.Get("end_date")
-	
-	w.Write([]byte(fmt.Sprintf("Start: %s and End: %s", start,end)))
+
+	w.Write([]byte(fmt.Sprintf("Start: %s and End: %s", start, end)))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
+func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Available",
+	}
+	output, err := json.MarshalIndent(resp, "", "	")
+	if err != nil {
+		log.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(output)
+
 }
 
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{
-	})
+	render.RenderTemplate(w, r, "contact.page.html", &models.TemplateData{})
 }
-
 
 func divideValues(x, y float32) (float32, error) {
 	if y == 0 {

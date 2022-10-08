@@ -1,32 +1,35 @@
 {{ template "base" .}}
 
 {{ define "content"}}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <img src="./static/images/generals-quarters.png" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <h2 class="text-center mt-3">Generals room</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi laborum quis est voluptas, nesciunt earum nobis sequi unde deserunt? Vel quasi quibusdam ratione vitae minus, aliquam officia quia ut et.</p>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col text-center">
-                <a href="#" id="check-avalibility-btn" class="btn btn-success">Make Reservation now!</a>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img src="./static/images/generals-quarters.png" class="img-fluid img-thumbnail mx-auto d-block room-image"
+                alt="">
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center mt-3">Generals room</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi laborum quis est voluptas, nesciunt
+                earum nobis sequi unde deserunt? Vel quasi quibusdam ratione vitae minus, aliquam officia quia ut et.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+            <a href="#" id="check-avalibility-btn" class="btn btn-success">Make Reservation now!</a>
+        </div>
+    </div>
+</div>
 {{ end }}
 
 {{ define "js" }}
 <script>
-document.getElementById("check-avalibility-btn").addEventListener("click", () => {
-    let html = `
-        <form action="" id="check-avalibility" method="POST" novalidate class="needs-validation">
+    document.getElementById("check-avalibility-btn").addEventListener("click", () => {
+        let html = `
+        <form action="" id="check-availability" method="POST" novalidate class="needs-validation">
             <div class="row" id="foo_date_modal">
                 <div class="mb-3 col">
                     <input disabled type="text" class="form-control" name="start" id="start"
@@ -39,8 +42,39 @@ document.getElementById("check-avalibility-btn").addEventListener("click", () =>
             </div>
         </form>
         `
-    attention.custom({html: html, title:"Set date"})
-})
+        attention.custom({
+            html: html,
+            title: "Set date",
+            willOpen: () => {
+                const foo_date_modal = document.getElementById("foo_date_modal")
+                const rangepicker_modal = new DateRangePicker(foo_date_modal, {
+                    format: "yyyy-mm-dd",
+                    showOnFocus: true
+                });
+            },
+            didOpen: () => {
+                document.getElementById("start").removeAttribute('disabled')
+                document.getElementById("end").removeAttribute('disabled')
+            },
+            callback: function (result) {
+                console.log(result);
+
+                let form = document.getElementById("check-availability")
+                let formData = new FormData(form)
+                formData.append("csrf_token", "{{.CSRFToken}}")
+
+                fetch("/search-availability-json", {
+                    method: "post",
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.ok);
+                        console.log(data.message);
+                    })
+            },
+        })
+    })
 </script>
 
 {{ end }}

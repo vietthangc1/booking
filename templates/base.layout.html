@@ -190,15 +190,14 @@
 					showCancelButton: true,
 					backdrop: false,
 					willOpen: () => {
-						const foo_date_modal = document.getElementById("foo_date_modal")
-						const rangepicker_modal = new DateRangePicker(foo_date_modal, {
-							format: "yyyy-mm-dd",
-							showOnFocus: true
-						});
+						if (inputConfig.willOpen !== undefined) {
+                            inputConfig.willOpen()
+                        }
 					},
 					didOpen: () => {
-						document.getElementById("start").removeAttribute('disabled')
-						document.getElementById("end").removeAttribute('disabled')
+						if (inputConfig.didOpen !== undefined) {
+                            inputConfig.didOpen()
+                        }
 					},
 					preConfirm: () => {
 						return [
@@ -209,7 +208,15 @@
 				})
 
 				if (formValues) {
-					Swal.fire(JSON.stringify(formValues))
+					if (formValues.dismiss !== Swal.DismissReason.cancel) {
+                        if (formValues != "") {
+                            inputConfig.callback(formValues)
+                        } else {
+                            inputConfig.callback(false)
+                        }
+                    } else {
+                        inputConfig.callback(false)
+                    }
 				}
 			}
 

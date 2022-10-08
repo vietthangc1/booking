@@ -7,21 +7,22 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/vietthangc1/booking/pkg/config"
-	"github.com/vietthangc1/booking/pkg/handlers"
-	"github.com/vietthangc1/booking/pkg/render"
+	"github.com/vietthangc1/booking/internal/config"
+	"github.com/vietthangc1/booking/internal/handlers"
+	"github.com/vietthangc1/booking/internal/render"
 )
 
 const port = ":8080"
+
 var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
 
 	app.InProduction = false
-	
+
 	session = scs.New()
-	session.Lifetime = 24*time.Hour
+	session.Lifetime = 24 * time.Hour
 	session.Cookie.SameSite = http.SameSiteLaxMode
 	session.Cookie.Secure = app.InProduction
 	app.Session = session
@@ -41,7 +42,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Running at http://localhost%s", port))
 
 	service := &http.Server{
-		Addr: "localhost"+port,
+		Addr:    "localhost" + port,
 		Handler: routes(&app),
 	}
 
